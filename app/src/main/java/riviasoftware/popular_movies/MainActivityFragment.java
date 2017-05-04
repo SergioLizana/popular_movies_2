@@ -1,5 +1,6 @@
 package riviasoftware.popular_movies;
 
+import android.app.ActionBar;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -9,9 +10,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.URI;
@@ -52,6 +57,7 @@ public class MainActivityFragment extends Fragment {
     private List<Movie> movies;
     private static final int TYPE_TOP_RATED = 1;
     private static final int TYPE_POPULAR = 2;
+    private String toolbarName;
 
     public MainActivityFragment() {
     }
@@ -106,6 +112,7 @@ public class MainActivityFragment extends Fragment {
 
 
         if (movies.isEmpty()) {
+            toolbarName = getString(R.string.top_rated);
             loadMovies(TYPE_TOP_RATED);
         } else {
             adapter.updateMovies(movies);
@@ -113,6 +120,10 @@ public class MainActivityFragment extends Fragment {
 
 
         return view;
+    }
+
+    public void changeToolBarName(){
+        getActivity().setTitle(toolbarName);
     }
 
     @Override
@@ -136,15 +147,19 @@ public class MainActivityFragment extends Fragment {
 
         switch (id) {
             case R.id.top_rated:
+                toolbarName = getString(R.string.top_rated);
                 loadMovies(TYPE_TOP_RATED);
                 break;
             case R.id.shorting_popular:
+                toolbarName = getString(R.string.popular);
                 loadMovies(TYPE_POPULAR);
                 break;
             case R.id.favorites:
+                toolbarName = getString(R.string.favorites);
                 loadFavorites();
                 break;
             default:
+                toolbarName = getString(R.string.top_rated);
                 loadMovies(TYPE_TOP_RATED);
                 break;
         }
@@ -154,6 +169,7 @@ public class MainActivityFragment extends Fragment {
     }
 
     public void loadMovies(int type) {
+
         Call<MoviesResponse> response = null;
         if (type == TYPE_TOP_RATED) {
             response = tmvDatabaseService.getTopRatedMovies(PopularMoviesConstants.apiKEY);
@@ -179,6 +195,7 @@ public class MainActivityFragment extends Fragment {
                     Log.d("MainActivity", t.getMessage());
                 }
             });
+        changeToolBarName();
         }
 
 
@@ -213,7 +230,7 @@ public class MainActivityFragment extends Fragment {
 
         }
         adapter.updateMovies(movies);
-
+        changeToolBarName();
     }
 
 

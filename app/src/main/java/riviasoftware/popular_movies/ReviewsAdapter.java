@@ -49,8 +49,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewAd
 
     @Override
     public void onBindViewHolder(ReviewsAdapter.ReviewAdapterViewHolder holder, int position) {
-
-        Review rw = data.get(position);
+        
         String username = data.get(position).getAuthor();
         String desc = data.get(position).getContent();
 

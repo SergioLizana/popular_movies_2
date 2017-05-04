@@ -45,7 +45,7 @@ public class ResumeMovieReviewsFragment extends Fragment {
     private List<Review> reviews;
     private TMVDatabaseService tmvDatabaseService;
     private ReviewsAdapter adapter;
-    private Movie movie;
+    private int movieId;
     private List<Review> reviewResponse;
 
 
@@ -82,8 +82,8 @@ public class ResumeMovieReviewsFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         View view = inflater.inflate(R.layout.fragment_review_list, container, false);
-        movie = getActivity().getIntent().getParcelableExtra("movie");
-        Log.d("movie",movie.getOriginalTitle());
+//        movie = getActivity().getIntent().getParcelableExtra("movie");
+        movieId = getActivity().getIntent().getIntExtra("movieId", 0);
         inflaterLayout = LayoutInflater.from(getContext());
         unbinder = ButterKnife.bind(this,view);
         tmvDatabaseService = ApiUtils.getTMVDataService();
@@ -112,7 +112,7 @@ public class ResumeMovieReviewsFragment extends Fragment {
 
     public void loadReviews(){
 
-        tmvDatabaseService.getReviewById(movie.getId(), PopularMoviesConstants.apiKEY).enqueue(new Callback<ReviewsResponse>() {
+        tmvDatabaseService.getReviewById(movieId, PopularMoviesConstants.apiKEY).enqueue(new Callback<ReviewsResponse>() {
             @Override
             public void onResponse(Call<ReviewsResponse> call, Response<ReviewsResponse> response) {
                 if(response.isSuccessful()){

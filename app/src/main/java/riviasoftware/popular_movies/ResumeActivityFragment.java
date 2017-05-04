@@ -142,11 +142,12 @@ public class ResumeActivityFragment extends Fragment {
                     releaseDate.setText(fmtOut.format(date).toUpperCase());
                     puntuacion.setText(String.valueOf(movie.getVoteAverage()));
                     overview.setText(movie.getOverview());
-
+                    getActivity().setTitle(movie.getTitle());
 
                 }else{
                     int statusCode = response.code();
                 }
+
             }
 
             @Override
