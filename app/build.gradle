@@ -10,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "APK_SIGN", (project.hasProperty('APK_SIGN') ? "\"$APK_SIGN\"" : "\"9fe6a0a6f0ff96c68da432a927a86821\"")
     }
     buildTypes {
         release {

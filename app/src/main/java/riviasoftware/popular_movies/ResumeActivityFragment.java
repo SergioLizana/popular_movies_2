@@ -53,8 +53,6 @@ public class ResumeActivityFragment extends Fragment {
     ImageView trailer;
     @BindView(R.id.play_trailer)
     ImageButton playTrailer;
-    @BindView(R.id.movie_title)
-    TextView title;
     @BindView(R.id.release_date)
     TextView releaseDate;
     @BindView(R.id.puntuacion)
@@ -69,7 +67,6 @@ public class ResumeActivityFragment extends Fragment {
     private TMVDatabaseService tmvDatabaseService;
     private int movieId;
     private Movie movie;
-    private List<Trailer> trailerResponse;
     private Unbinder unbinder;
     private LayoutInflater inflaterLayout;
 
@@ -100,8 +97,11 @@ public class ResumeActivityFragment extends Fragment {
         playTrailer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String URL = ApiUtils.YOUTUBE_URL + trailerResponse.get(0).getKey();
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(URL)));
+                String URL = ApiUtils.YOUTUBE_URL + ((ResumeMovieActivity)getActivity()).trailerResponse.get(0).getKey();
+                Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(URL));
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                }
             }
         });
 
@@ -125,7 +125,6 @@ public class ResumeActivityFragment extends Fragment {
                     Glide.with(getActivity().getApplicationContext()).load(imageURL).error(R.drawable.defaultmovie).into(poster);
                     String imageURL2 = ApiUtils.IMAGE_URL_780 + movie.getBackdropPath();
                     Glide.with(getActivity().getApplicationContext()).load(imageURL2).error(R.drawable.defaultmovie).into(trailer);
-                    title.setText(movie.getTitle());
 
 
                     SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
@@ -165,7 +164,7 @@ public class ResumeActivityFragment extends Fragment {
             public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
 
                 if (response.isSuccessful()){
-                    trailerResponse = response.body().getResults();
+                    ((ResumeMovieActivity)getActivity()).trailerResponse = response.body().getResults();
                 }else{
                     int statusCode  = response.code();
                     Log.d("MainActivity", "error loading from API status code: "+statusCode);
