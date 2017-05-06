@@ -62,7 +62,7 @@ public class ResumeMovieReviewsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        if (savedInstanceState == null || !savedInstanceState.containsKey("movies")){
+        if (savedInstanceState == null || !savedInstanceState.containsKey("reviews")){
             reviews = new ArrayList<Review>();
         }else{
             reviews = savedInstanceState.getParcelableArrayList("reviews");
@@ -82,7 +82,6 @@ public class ResumeMovieReviewsFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         View view = inflater.inflate(R.layout.fragment_review_list, container, false);
-//        movie = getActivity().getIntent().getParcelableExtra("movie");
         movieId = getActivity().getIntent().getIntExtra("movieId", 0);
         inflaterLayout = LayoutInflater.from(getContext());
         unbinder = ButterKnife.bind(this,view);

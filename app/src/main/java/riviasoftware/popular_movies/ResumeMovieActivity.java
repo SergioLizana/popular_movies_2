@@ -55,7 +55,7 @@ public class ResumeMovieActivity extends AppCompatActivity {
                                 selectedFragment = ResumeMovieReviewsFragment.newInstance();
                                 break;
                             case R.id.navigation_resources:
-                                selectedFragment = ResumeActivityFragment.newInstance();
+                                selectedFragment = ResumeMovieTrailersFragment.newInstance();
                                 break;
                         }
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
