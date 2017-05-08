@@ -171,9 +171,9 @@ public class ResumeActivityFragment extends Fragment {
                     ((ResumeMovieActivity)getActivity()).trailerResponse = response.body().getResults();
 
                     if (!response.body().getResults().isEmpty()){
-                        playTrailer.setVisibility(View.INVISIBLE);
-                    }else{
                         playTrailer.setVisibility(View.VISIBLE);
+                    }else{
+                        playTrailer.setVisibility(View.INVISIBLE);
                     }
                 }else{
                     int statusCode  = response.code();
