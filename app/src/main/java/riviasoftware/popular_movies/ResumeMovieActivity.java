@@ -23,12 +23,17 @@ import riviasoftware.popular_movies.data.TrailerResponse;
 public class ResumeMovieActivity extends AppCompatActivity {
 
     public List<Trailer> trailerResponse;
-
+    Integer fragmentId =  R.id.navigation_home;
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         if (trailerResponse != null){
             outState.putParcelableArrayList("trailers",(ArrayList)trailerResponse);
         }
+
+        if (fragmentId != null){
+            outState.putInt("fragment",fragmentId);
+        }
+
         super.onSaveInstanceState(outState);
 
     }
@@ -36,30 +41,24 @@ public class ResumeMovieActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_resume);
-        BottomNavigationView bottomNavigationView = (BottomNavigationView)
-                findViewById(R.id.navigation);
         if (savedInstanceState != null && savedInstanceState.containsKey("trailers")){
             trailerResponse =  savedInstanceState.getParcelableArrayList("trailers");
         }
+        if (savedInstanceState != null && savedInstanceState.containsKey("fragment")){
+            fragmentId = savedInstanceState.getInt("fragment",R.layout.activity_resume);
+        }
+        setContentView( R.layout.activity_resume);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.navigation);
+
+
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        Fragment selectedFragment = null;
-                        switch (item.getItemId()) {
-                            case R.id.navigation_home:
-                                selectedFragment = ResumeActivityFragment.newInstance();
-                                break;
-                            case R.id.navigation_review:
-                                selectedFragment = ResumeMovieReviewsFragment.newInstance();
-                                break;
-                            case R.id.navigation_resources:
-                                selectedFragment = ResumeMovieTrailersFragment.newInstance();
-                                break;
-                        }
+                        fragmentId = item.getItemId();
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.frame_layout, selectedFragment);
+                        transaction.replace(R.id.frame_layout,getFragment());
                         transaction.commit();
                         return true;
                     }
@@ -68,13 +67,26 @@ public class ResumeMovieActivity extends AppCompatActivity {
         //Manually displaying the first fragment - one time only
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        transaction.replace(R.id.frame_layout, ResumeActivityFragment.newInstance());
+        transaction.replace(R.id.frame_layout, getFragment());
         transaction.commit();
 
-        //Used to select an item programmatically
-        //bottomNavigationView.getMenu().getItem(2).setChecked(true);
     }
 
+    private Fragment getFragment(){
+        Fragment selectedFragment = null;
+        switch (fragmentId) {
+            case R.id.navigation_home:
+                selectedFragment = ResumeActivityFragment.newInstance();
+                break;
+            case R.id.navigation_review:
+                selectedFragment = ResumeMovieReviewsFragment.newInstance();
+                break;
+            case R.id.navigation_resources:
+                selectedFragment = ResumeMovieTrailersFragment.newInstance();
+                break;
+        }
+        return selectedFragment;
+    }
 
 
 }

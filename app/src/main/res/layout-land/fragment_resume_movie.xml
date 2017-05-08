@@ -65,6 +65,7 @@
         android:layout_marginTop="22dp"
         app:layout_constraintTop_toBottomOf="@+id/trailer"
         app:layout_constraintLeft_toRightOf="@+id/image_photo_poster"
+        tools:text = "19 SEPTEMBER 2017"
         android:layout_marginLeft="8dp" />
 
     <TextView
@@ -93,7 +94,7 @@
         android:id="@+id/overview"
         android:layout_width="402dp"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        tools:text="@string/loremipsum"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:layout_marginRight="15dp"
         app:layout_constraintRight_toRightOf="parent"

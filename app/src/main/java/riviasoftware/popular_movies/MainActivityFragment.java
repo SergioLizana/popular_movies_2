@@ -19,6 +19,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +46,10 @@ public class MainActivityFragment extends Fragment {
 
     @BindView(R.id.recyclerviewmain)
     RecyclerView mRecyclerView;
+
+    @BindView(R.id.emptyListAlert)
+    TextView emptyListAlert;
+
     private GridAdapter adapter;
     private TMVDatabaseService tmvDatabaseService;
     private Unbinder unbinder;
@@ -69,7 +77,9 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("movies", (ArrayList) movies);
+        if (movies !=null) {
+            outState.putParcelableArrayList("movies", (ArrayList) movies);
+        }
         super.onSaveInstanceState(outState);
     }
 
@@ -100,7 +110,6 @@ public class MainActivityFragment extends Fragment {
         }
 
         mRecyclerView.setLayoutManager(mGridVerticalLayoutManager);
-
 
         if (movies.isEmpty()) {
             toolbarName = getString(R.string.top_rated);
@@ -187,6 +196,7 @@ public class MainActivityFragment extends Fragment {
                 }
             });
         changeToolBarName();
+        changeVisibilityAlert();
         }
 
 
@@ -221,8 +231,16 @@ public class MainActivityFragment extends Fragment {
 
         }
         adapter.updateMovies(movies);
+        changeVisibilityAlert();
         changeToolBarName();
     }
 
+    private void changeVisibilityAlert(){
+        if (movies !=null && !movies.isEmpty()){
+            emptyListAlert.setVisibility(View.INVISIBLE);
+        }else{
+            emptyListAlert.setVisibility(View.VISIBLE);
+        }
+    }
 
 }

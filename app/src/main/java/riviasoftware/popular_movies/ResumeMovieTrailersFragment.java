@@ -1,5 +1,7 @@
 package riviasoftware.popular_movies;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import riviasoftware.popular_movies.data.Trailer;
+import riviasoftware.popular_movies.retrofit.utils.ApiUtils;
 
 /**
  * Created by sergiolizanamontero on 6/5/17.
@@ -28,6 +32,8 @@ public class ResumeMovieTrailersFragment extends Fragment {
     private LayoutInflater inflaterLayout;
     @BindView(R.id.recyclerviewtrailers)
     RecyclerView mRecyclerView;
+    @BindView(R.id.emptyListTrailerAlert)
+    TextView emptyListTrailerAlert;
     private Unbinder unbinder;
     private List<Trailer> trailers;
     private TrailersAdapter adapter;
@@ -47,9 +53,9 @@ public class ResumeMovieTrailersFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (savedInstanceState == null || !savedInstanceState.containsKey("trailers")){
-
+            trailers = new ArrayList<Trailer>();
         }else{
-
+            trailers = savedInstanceState.getParcelableArrayList("trailers");
         }
 
     }
@@ -66,20 +72,26 @@ public class ResumeMovieTrailersFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         View view = inflater.inflate(R.layout.fragment_trailer_list, container, false);
-        trailers =  ((ResumeMovieActivity)getActivity()).trailerResponse;
-        inflaterLayout = LayoutInflater.from(getContext());
         unbinder = ButterKnife.bind(this,view);
-        adapter = new TrailersAdapter(getActivity(), (ArrayList)trailers);
+        trailers =  ((ResumeMovieActivity)getActivity()).trailerResponse;
+        changeVisibilityAlert();
+        inflaterLayout = LayoutInflater.from(getContext());
+        getActivity().setTitle(R.string.title_trailers);
+        adapter = new TrailersAdapter(getActivity(), (ArrayList) trailers);
         adapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Trailer item = (Trailer) v.getTag();
+                String URL = ApiUtils.YOUTUBE_URL + item.getKey();
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(URL));
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                }
             }
         });
         mRecyclerView.setAdapter(adapter);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(),LinearLayout.VERTICAL,false);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        adapter.updateReview(trailers);
 
         return view;
     }
@@ -90,6 +102,14 @@ public class ResumeMovieTrailersFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+    }
+
+    private void changeVisibilityAlert(){
+        if (trailers !=null && !trailers.isEmpty()){
+            emptyListTrailerAlert.setVisibility(View.INVISIBLE);
+        }else{
+            emptyListTrailerAlert.setVisibility(View.VISIBLE);
+        }
     }
 
 

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -41,6 +42,8 @@ public class ResumeMovieReviewsFragment extends Fragment {
     private LayoutInflater inflaterLayout;
     @BindView(R.id.recyclerviewresume)
     RecyclerView mRecyclerView;
+    @BindView(R.id.emptyListReviewAlert)
+    TextView emptyListReviewAlert;
     private Unbinder unbinder;
     private List<Review> reviews;
     private TMVDatabaseService tmvDatabaseService;
@@ -83,6 +86,7 @@ public class ResumeMovieReviewsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_review_list, container, false);
         movieId = getActivity().getIntent().getIntExtra("movieId", 0);
+        getActivity().setTitle(R.string.title_reviews);
         inflaterLayout = LayoutInflater.from(getContext());
         unbinder = ButterKnife.bind(this,view);
         tmvDatabaseService = ApiUtils.getTMVDataService();
@@ -103,7 +107,7 @@ public class ResumeMovieReviewsFragment extends Fragment {
         }else{
             adapter.updateReview(reviews);
         }
-
+        changeVisibilityAlert();
 
         return view;
     }
@@ -116,13 +120,12 @@ public class ResumeMovieReviewsFragment extends Fragment {
             public void onResponse(Call<ReviewsResponse> call, Response<ReviewsResponse> response) {
                 if(response.isSuccessful()){
                     reviewResponse = response.body().getResults();
-
                     adapter.updateReview(reviewResponse);
 
 
                 }else{
                     int statusCode = response.code();
-                    Log.d("ResumeActivity","error loading from api");
+                    Log.d("ResumeActivity","error loading from api "+statusCode);
                 }
             }
 
@@ -139,5 +142,12 @@ public class ResumeMovieReviewsFragment extends Fragment {
         unbinder.unbind();
     }
 
+    private void changeVisibilityAlert(){
+        if (reviews !=null && !reviews.isEmpty()){
+            emptyListReviewAlert.setVisibility(View.INVISIBLE);
+        }else{
+            emptyListReviewAlert.setVisibility(View.VISIBLE);
+        }
+    }
 
 }

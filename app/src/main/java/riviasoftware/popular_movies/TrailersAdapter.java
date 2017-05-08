@@ -11,13 +11,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import riviasoftware.popular_movies.data.Review;
 import riviasoftware.popular_movies.data.Trailer;
 
 
-/**
- * Created by sergiolizanamontero on 17/4/17.
- */
 
 public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.TrailersAdapterViewHolder> implements View.OnClickListener {
 
@@ -48,18 +44,10 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
     @Override
     public void onBindViewHolder(TrailersAdapter.TrailersAdapterViewHolder holder, int position) {
-
-//        String username = data.get(position).getAuthor();
-//        String desc = data.get(position).getContent();
-//
-//        holder.mReviewItem.setTag(data.get(position));
-//        holder.userNameReview.setText(username);
-//        holder.descReview.setText(desc);
-//
-//
-//
-//
-//        holder.mReviewItem.setOnClickListener(this);
+          String trailerName = data.get(position).getName();
+          holder.mTrailerItem.setTag(data.get(position));
+          holder.nameTrailer.setText(trailerName);
+          holder.mTrailerItem.setOnClickListener(this);
 
     }
 
@@ -82,12 +70,12 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         notifyItemInserted(position);
     }
 
-    public void updateReview(List<Trailer> trailers) {
+    public void updateTrailers(List<Trailer> trailers) {
         data = trailers;
         notifyDataSetChanged();
     }
 
-    public  Trailer getReviews(int adapterPosition) {
+    public  Trailer getTrailers(int adapterPosition) {
 
         return data.get(adapterPosition);
     }
@@ -104,15 +92,13 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
     public class TrailersAdapterViewHolder extends RecyclerView.ViewHolder{
 
-        RelativeLayout mReviewItem;
-        TextView userNameReview;
-        TextView descReview;
+        RelativeLayout mTrailerItem;
+        TextView nameTrailer;
 
         public TrailersAdapterViewHolder(View itemView) {
             super(itemView);
-            userNameReview = (TextView) itemView.findViewById(R.id.userNameReview);
-            descReview = (TextView) itemView.findViewById(R.id.reviewDesc);
-            mReviewItem = (RelativeLayout) itemView.findViewById(R.id.reviewItem);
+            nameTrailer = (TextView) itemView.findViewById(R.id.nameTrailer);
+            mTrailerItem = (RelativeLayout) itemView.findViewById(R.id.trailerItem);
 
         }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
     android:id="@+id/reviewItem"
     android:background="@drawable/background_border"
     android:orientation="vertical"
@@ -16,14 +17,16 @@
     <TextView android:id="@+id/userNameReview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        tool:text="UserName Review"
         android:textStyle="bold"
-        android:textSize="20sp" />
+        android:textSize="@dimen/nameReviewSize" />
 
     <TextView android:id="@+id/reviewDesc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:textStyle="normal"
-        android:textSize="12sp" />
+        tool:text="Description Review"
+        android:textSize="@dimen/textReviewSize" />
 
 </RelativeLayout>

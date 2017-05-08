@@ -97,10 +97,14 @@ public class ResumeActivityFragment extends Fragment {
         playTrailer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String URL = ApiUtils.YOUTUBE_URL + ((ResumeMovieActivity)getActivity()).trailerResponse.get(0).getKey();
-                Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(URL));
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(intent);
+                if(!((ResumeMovieActivity)getActivity()).trailerResponse.isEmpty()) {
+                    String URL = ApiUtils.YOUTUBE_URL + ((ResumeMovieActivity) getActivity()).trailerResponse.get(0).getKey();
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(URL));
+                    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                        startActivity(intent);
+                    }
+                }else{
+
                 }
             }
         });
@@ -165,6 +169,12 @@ public class ResumeActivityFragment extends Fragment {
 
                 if (response.isSuccessful()){
                     ((ResumeMovieActivity)getActivity()).trailerResponse = response.body().getResults();
+
+                    if (!response.body().getResults().isEmpty()){
+                        playTrailer.setVisibility(View.INVISIBLE);
+                    }else{
+                        playTrailer.setVisibility(View.VISIBLE);
+                    }
                 }else{
                     int statusCode  = response.code();
                     Log.d("MainActivity", "error loading from API status code: "+statusCode);
@@ -216,7 +226,6 @@ public class ResumeActivityFragment extends Fragment {
         values.put(DBContract.DBEntry.COLUMN_MOVIE_URL_IMAGE,movie.getPosterPath());
 
         cr.insert(favUri,values);
-        Log.d("Inser","USER INSERTED");
     }
 
     public int removeMovieFromFav(){
